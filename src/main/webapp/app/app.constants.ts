@@ -5,6 +5,5 @@
 export const VERSION = process.env.VERSION;
 export const DEBUG_INFO_ENABLED: boolean = !!process.env.DEBUG_INFO_ENABLED;
 export const SERVER_API_URL = process.env.SERVER_API_URL;
-export const SERVER_OAUTH2_URL = process.env.SECURITY_OAUTH2_RESOURCE_JWT_KEY_URI;
 export const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;
 

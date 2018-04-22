@@ -51,8 +51,7 @@ module.exports = (options) => ({
                 // If this URL is left empty (""), then it will be relative to the current context.
                 // If you use an API server, in `prod` mode, you will need to enable CORS
                 // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-                SERVER_API_URL: `''`,
-                SECURITY_OAUTH2_RESOURCE_JWT_KEY_URI: `'http://localhost:9080/auth/realms/jhipster'`
+                SERVER_API_URL: `''`
             }
         }),
         new webpack.optimize.CommonsChunkPlugin({

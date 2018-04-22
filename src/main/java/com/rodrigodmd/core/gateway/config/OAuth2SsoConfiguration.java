@@ -59,6 +59,7 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
             .requestMatcher(new NegatedRequestMatcher(authorizationHeaderRequestMatcher))
             .authorizeRequests()
             .antMatchers("/api/profile-info").permitAll()
+            .antMatchers("/api/logout-redirect").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -85,10 +86,6 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
 
             response.setContentType("text/html");
             response.setStatus(200);
-
-            //response.setStatus(302);
-            //response.encodeRedirectURL("http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Flocalhost%3A8080");
-            //response.sendRedirect("http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Flocalhost%3A8080");
         }
     }
 

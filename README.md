@@ -195,6 +195,12 @@ To achieve this, first build a docker image of your app by running:
 
     ./gradlew bootRepackage -Pprod buildDocker
 
+To build and push:
+```bash
+ $ cd build/docker/   
+ $ docker build -t rodrigodmd/gateway:<version> .
+ $ docker push rodrigodmd/gateway:<version>
+```
 Then run:
 
     docker-compose -f src/main/docker/app.yml up -d

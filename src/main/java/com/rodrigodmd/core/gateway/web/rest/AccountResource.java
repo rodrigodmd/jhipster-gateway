@@ -1,11 +1,14 @@
 package com.rodrigodmd.core.gateway.web.rest;
 
+import com.rodrigodmd.core.gateway.config.ApplicationProperties;
 import com.rodrigodmd.core.gateway.domain.User;
 import com.rodrigodmd.core.gateway.web.rest.errors.InternalServerErrorException;
 
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +25,17 @@ import java.util.stream.Collectors;
  * REST controller for managing the current user's account.
  */
 @RestController
+@EnableConfigurationProperties({ApplicationProperties.class})
 @RequestMapping("/api")
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
+
+    private final Environment env;
+
+    public AccountResource(Environment env) {
+        this.env = env;
+    }
 
     /**
      * GET  /authenticate : check if the user is authenticated, and return its login.
@@ -85,6 +95,30 @@ public class AccountResource {
     @GetMapping("/manage-account")
     @Timed
     public ModelAndView activeRoutes() {
-        return new ModelAndView("redirect:" + "http://localhost:9080/auth/realms/jhipster/account?referrer=web_app");
+        String oauth2Url = env.getProperty("security.oauth2.resource.jwt.key-uri");
+        return new ModelAndView("redirect:" + oauth2Url + "/account?referrer=web_app");
+    }
+
+    /**
+     * GET  /logout-redirect : Redirect to oauth2 logut url with a redirect uri to come back to the host
+     *
+     * @return ModelAndView
+     */
+    @GetMapping("/logout-redirect")
+    @Timed
+    public ModelAndView logout(HttpServletRequest request) {
+        String oauth2Url = env.getProperty("security.oauth2.resource.jwt.key-uri");
+        String baseUrl = getBaseUrl(request);
+        return new ModelAndView("redirect:" + oauth2Url + "/protocol/openid-connect/logout?redirect_uri=" + baseUrl);
+    }
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    private String getBaseUrl(HttpServletRequest request) {
+        String baseUrl = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length()) + request.getContextPath();
+        return baseUrl;
     }
 }
